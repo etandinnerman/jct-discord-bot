@@ -14,29 +14,35 @@ class PollCog(commands.Cog):
 	async def poll(self, ctx, *args):
 		"""
 		A command to create new user polls
-		[ Title | Description | inline (True/False)] | Options (2-26) ]
+		[ Query | Description | Options (2-26) ]
 		"""
 
 		# strip the command trigger from the message
 		msg = ctx.message.content.replace("~poll", "")
 
+		# TODO: Smarter text parsing, we CANNOT make this many assumptions about input
+		# 		Right now the focus is on building a minimum viable product
+		
 		# split the command into args and remove leading/trailing whitespace
 		sentence = msg.split("|")
 		sentence = [word.strip() for word in sentence]
+		poll_query = sentence[0]
+		poll_desc = sentence[1]
+		poll_options = [
+			sentence[i] for i in range(2, len(sentence))
+		]  # error related to list comprehension, cannot figure
 
-		# TODO: Smarter text parsing, we CANNOT make this many assumptions about input
-		# 		Right now the focus is on building a minimum viable product
+		# the embed will contain the formatted poll
+		poll_embed = discord.Embed(title=poll_query, description=poll_desc)
+		poll_embed.set_author(
+			name=ctx.author.display_name, icon_url=ctx.author.avatar_url
+		)
+		for i, option in poll_options:
+			embed.add_field(
+				name="", value=":regional_indicator_" + i + ":", inline=True
+			)
 
-		# initialize the embed and assign a few attributes we'll need later
-		embed = discord.Embed(title=sentence[0], description=sentence[1])
-		embed.set_author(name=ctx.author.display_name, icon_url=ctx.author.avatar_url)
-		inline = sentence[2]
-
-		for word in sentence[3:]:
-			embed.add_field(value="", name=word, inline=inline)
-
-		for i, field in embed.fields:
-			field.value = await add_reaction(self.reacts[i])
+		await send(content=None, embed=embed)
 
 
 def setup(bot):
