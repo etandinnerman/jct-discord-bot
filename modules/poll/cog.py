@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from modules.poll,createPoll import createPoll
+from modules.poll import Poll
 
 
 class PollCog(commands.Cog):
@@ -10,8 +10,9 @@ class PollCog(commands.Cog):
 	@commands.command(name="poll")
 	async def poll(self, ctx, *args):
 		""" A command to create new user polls """
+		""" ++poll Title | Desc | Option 1 | Option 2 | ... | Option n """
 
-		poll = createPoll(ctx.message.content)
+		poll = Poll(ctx.message.content, args)
 
 
 def setup(bot):
