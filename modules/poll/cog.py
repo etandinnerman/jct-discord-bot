@@ -4,16 +4,17 @@ from modules.poll import Poll
 
 
 class PollCog(commands.Cog):
-	def __init__(self, bot):
-		self.bot = bot
+    def __init__(self, bot):
+        self.bot = bot
 
-	@commands.command(name="poll")
-	async def poll(self, ctx, *args):
-		""" A command to create new user polls """
-		""" ++poll Title | Desc | Option 1 | Option 2 | ... | Option n """
+    @commands.command(name="poll")
+    async def poll(self, ctx, *args):
+        """ A command to create new user polls """
+        """ ++poll Title | Desc | Option 1 | Option 2 | ... | Option n """
+        poll = Poll(ctx.message.content, args)
+        await ctx.send(content=None, embed=poll.embed, delete_after=300, nonce=1)
 
-		poll = Poll(ctx.message.content, args)
 
 
 def setup(bot):
-	bot.add_cog(PollCog(bot))
+    bot.add_cog(PollCog(bot))
