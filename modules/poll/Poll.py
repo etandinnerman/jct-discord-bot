@@ -13,19 +13,13 @@ class Poll(PollCog):
 		return embed
 
 	def getTokens(self, msg: str):
-
-		title = msg[msg.index("{" + 1) : msg.index("}")]
-		title = title.strip()
-
-		desc = msg[msg.index("'" + 1) : msg.index("[")]
-		desc = desc.strip()
-
+		title = msg[msg.index("{" + 1) : msg.index("}")].strip()
+		desc = msg[msg.index("'" + 1) : msg.index("[")].strip()
 		options = msg[msg.index("[" + 1) : msg.index("]")].split(",")
-		options = [option.strip() for option in options]
+		for option in options:
+			txt = option[[option.index("(") + 1] : option.index(":") - 1]
+			emoji = option[[option.index(":")] : option.index(")")]
+			option = [txt, emoji]
 
-		tokens = {
-			"title" : title,
-			"desc" : desc,
-			"options" : options
-		}
+		tokens = {"title": title, "desc": desc, "options": options}
 		return tokens
