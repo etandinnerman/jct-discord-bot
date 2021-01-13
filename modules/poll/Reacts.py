@@ -1,15 +1,17 @@
+import discord
 from modules.poll.cog import PollCog
 
 
 class Reacts(PollCog):
-	def __init__(self, poll):
-		reactions = self.getReactions(poll)
+	def __init__(self, options, msg):
+		reactions = self.createReactions(options, msg)
 
 
-	def getReactions(self, poll):
-		reactions = {}
-		for option in poll.options:
-			opt = option[: option.index(":")].strip()
-			emoji = option[option.index(":") + 1 :].strip()
-			reactions.update({opt: emoji})
+	def createReactions(self, options, msg):
+		reactions = []
+		for option in options:
+			re = discord.Reaction(emoji=option[1], message=msg)
+			reactions.append(re)
 		return reactions
+
+	# functions for responding to interactions with reacts will also go in this class
