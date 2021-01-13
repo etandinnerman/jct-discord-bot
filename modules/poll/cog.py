@@ -1,6 +1,8 @@
 import discord
 from discord.ext import commands
-from modules.poll import Poll, Reacts, getTokens
+from modules.poll.poll import Poll
+from modules.poll.reacts import Reacts
+from modules.poll.get_tokens import get_tokens
 
 
 class PollCog(commands.Cog):
@@ -13,13 +15,13 @@ class PollCog(commands.Cog):
 
 		# Tokenize the command string
 		# Command String: ++poll {Title} 'Description' [ (Option :emoji:), (Option :emoji:), ... ]
-		tokens = getTokens(ctx.message.content)
+		tokens = get_tokens(ctx.message.content)
 
 		# Create the Poll object
 		poll = Poll(tokens)
 
 		# Create the Reacts object
-		reacts = Reacts(ctx.message, tokens.option)
+		reacts = Reacts(tokens.options, ctx.message, commands)
 
 		msg = await ctx.send(content=None, embed=poll.embed, delete_after=300, nonce=1)
 		for react in reacts:

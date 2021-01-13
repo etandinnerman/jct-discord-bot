@@ -1,4 +1,4 @@
-def getTokens(self, msg: str):
+def get_tokens(self, msg: str):
 	title = msg[msg.index("{") + 1 : msg.index("}")].strip()
 	desc = msg[msg.index("'") + 1 : msg.index("[")].strip()
 	options = msg[msg.index("[") + 1 : msg.index("]")].split(",")
