@@ -3,14 +3,14 @@ from modules.poll.cog import PollCog
 
 
 class Reacts(PollCog):
-	def __init__(self, options, msg):
-		reactions = self.createReactions(options, msg)
+	def __init__(self, msg, options):
+		reactions = self.createReactions(msg, options)
 
 
-	def createReactions(self, options, msg):
+	def createReactions(self, msg, options):
 		reactions = []
 		for option in options:
-			re = discord.Reaction(emoji=option[1], message=msg)
+			re = discord.Reaction(message=msg, emoji=option[1])
 			reactions.append(re)
 		return reactions
 

@@ -19,7 +19,7 @@ class PollCog(commands.Cog):
 		poll = Poll(tokens)
 
 		# Create the Reacts object
-		reacts = Reacts(tokens.options, ctx.message)
+		reacts = Reacts(ctx.message, tokens.option)
 
 		msg = await ctx.send(content=None, embed=poll.embed, delete_after=300, nonce=1)
 		for react in reacts:
