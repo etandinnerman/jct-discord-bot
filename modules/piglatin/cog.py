@@ -5,8 +5,7 @@ class PigLatinCog(commands.Cog):
 	def __init__(self, bot):
 		self.bot = bot
 
-
-	@commands.command(name='piglatin')
+	@commands.command(name="piglatin")
 	async def piglatin(self, ctx, *args):
 		"""Will convert message to pig latin."""
 
@@ -14,7 +13,7 @@ class PigLatinCog(commands.Cog):
 		print('Executing command "piglatin".')
 
 		# reply with a message
-		await ctx.send(translate(' '.join(args)))
+		await ctx.send(translate(" ".join(args)))
 
 
 def setup(bot):
