@@ -10,4 +10,3 @@ def init():
 
 	# Discord setup
 	token = os.getenv("DISCORD_TOKEN")
-	guild_id = int(os.getenv("DISCORD_GUILD"))
