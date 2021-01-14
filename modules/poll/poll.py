@@ -2,6 +2,11 @@ import discord
 from typing import List
 from modules.error.friendly_error import FriendlyError
 
+# TODO
+# if user forgor time, don't pop
+# allow JCT bot to vote multiple times
+# 
+
 
 class Poll:
 	def __init__(self, msg: discord.Message):
@@ -12,6 +17,7 @@ class Poll:
 		self.emojis = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣"]
 		self.embed = self.__create_embed()
 		self.voters = {}
+		self.fraudsters = {} # attempted to vote twice
 
 	# should probably make an options class
 	def __extract_options(self) -> List[str]:
@@ -45,10 +51,18 @@ class Poll:
 		return embed
 
 	async def vote(self, reaction: discord.Reaction, member: discord.Member):
+		print(member.display_name + "attempting to vote")
 		if member in self.voters:
-			await self.msg.remove_reaction(reaction.emoji, member)
+			print(member.display_name + "already voted")
+			await reaction.remove(member)
+			self.fraudsters[member] = reaction
+			print(member.display_name + "already voted - done")
 		else:
 			self.voters[member] = reaction
+			print(member.display_name + "succesfully voted")
 
 	async def unvote(self, reaction: discord.Reaction, member: discord.Member):
-		self.voters.pop(member)
+		print(member.display_name + "succesfully unvoted")
+		if member not in self.fraudsters:
+			self.voters.pop(member)
+		self.fraudsters.pop(member)

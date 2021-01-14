@@ -15,8 +15,8 @@ class PollCog(commands.Cog):
 		""" A command to create new user polls """
 		# Create the Poll object
 		poll = Poll(ctx.message)
-		self.polls[ctx.message] = poll
 		self.msg = await ctx.send(embed=poll.embed, delete_after=poll.duration)
+		self.polls[self.msg] = poll
 		for i in range(len(poll.options)):
 			await self.msg.add_reaction(poll.emojis[i])
 		# delete the og message
@@ -24,13 +24,15 @@ class PollCog(commands.Cog):
 
 	@commands.Cog.listener()
 	async def on_reaction_add(self, reaction: discord.Reaction, member: discord.Member):
-		if reaction.message in self.polls:
-			self.polls[reaction.message].vote(reaction, member)
+		if reaction.message in self.polls and not member.bot:
+			print(member.display_name + "added reaction")
+			await self.polls[reaction.message].vote(reaction, member)
 
 	@commands.Cog.listener()
 	async def on_reaction_remove(self, reaction: discord.Reaction, member: discord.Member):
-		if reaction.message in self.polls:
-			self.polls[reaction.message].unvote(reaction, member)
+		if reaction.message in self.polls and not member.bot:
+			print(member.display_name + "removed reaction")
+			await self.polls[reaction.message].unvote(reaction, member)
 
 def setup(bot):
 	bot.add_cog(PollCog(bot))
