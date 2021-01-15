@@ -17,7 +17,7 @@ class Poll:
 		self.emojis = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣"]
 		self.embed = self.__create_embed()
 		self.voters = {}
-		self.fraudsters = {} # attempted to vote twice
+		self.fraudsters = [] # attempted to vote twice
 
 	# should probably make an options class
 	def __extract_options(self) -> List[str]:
@@ -54,8 +54,8 @@ class Poll:
 		print(member.display_name + "attempting to vote")
 		if member in self.voters:
 			print(member.display_name + "already voted")
+			self.fraudsters.append(member)
 			await reaction.remove(member)
-			self.fraudsters[member] = reaction
 			print(member.display_name + "already voted - done")
 		else:
 			self.voters[member] = reaction
@@ -65,4 +65,4 @@ class Poll:
 		print(member.display_name + "succesfully unvoted")
 		if member not in self.fraudsters:
 			self.voters.pop(member)
-		self.fraudsters.pop(member)
+		self.fraudsters.pop(0)
